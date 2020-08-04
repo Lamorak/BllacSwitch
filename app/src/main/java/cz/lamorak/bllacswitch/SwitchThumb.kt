@@ -22,7 +22,7 @@ class SwitchThumb : View {
     private val paint = Paint().apply {
         color = Color.WHITE
         isAntiAlias = true
-        strokeWidth = dip(2).toFloat()
+        strokeWidth = dip(1.5f).toFloat()
         style = Paint.Style.STROKE
     }
 
