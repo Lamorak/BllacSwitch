@@ -1,7 +1,12 @@
 package cz.lamorak.bllacswitch
 
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_UP
 import android.view.View
@@ -15,6 +20,8 @@ class BllacSwitch : FrameLayout, Checkable, MotionLayout.TransitionListener {
     private var listener: (Boolean) -> Unit = {}
 
     private var isChecked = false
+
+    private val backgroundAnimator = ObjectAnimator.ofArgb(getColor(R.color.switch_unchecked), getColor(R.color.switch_checked))
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
@@ -61,6 +68,7 @@ class BllacSwitch : FrameLayout, Checkable, MotionLayout.TransitionListener {
 
     override fun onTransitionChange(layout: MotionLayout?, startId: Int, endId: Int, transitionProgress: Float) {
         thumb.progress = transitionProgress
+        track.backgroundTintList = ColorStateList.valueOf(backgroundColor(transitionProgress))
     }
 
     override fun onTransitionCompleted(layout: MotionLayout?, currentId: Int) {
@@ -79,5 +87,12 @@ class BllacSwitch : FrameLayout, Checkable, MotionLayout.TransitionListener {
             return true
         }
         return super.dispatchTouchEvent(event)
+    }
+
+    private fun backgroundColor(progress: Float): Int {
+        return backgroundAnimator.apply {
+            setCurrentFraction(progress)
+        }
+            .animatedValue as Int
     }
 }
