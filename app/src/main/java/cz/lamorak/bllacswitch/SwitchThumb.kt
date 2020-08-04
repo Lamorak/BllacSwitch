@@ -19,15 +19,17 @@ class SwitchThumb : View {
         defStyleAttr
     )
 
+    private val lineWidth = dip(1.5f).toFloat()
     private val paint = Paint().apply {
         color = Color.WHITE
         isAntiAlias = true
-        strokeWidth = dip(1.5f).toFloat()
+        strokeWidth = lineWidth
         style = Paint.Style.STROKE
     }
 
     private var fullRect = RectF()
     private var currentRect = RectF()
+    private var currentRadius = 0f
 
     var progress = 0f
             set(value) {
@@ -42,12 +44,13 @@ class SwitchThumb : View {
     }
 
     override fun onDraw(canvas: Canvas) {
-        canvas.drawOval(currentRect, paint)
+        canvas.drawRoundRect(currentRect, currentRadius, currentRadius, paint)
     }
 
     private fun updateRect() {
-        val dx = progress * fullRect.width() / 2f
+        val dx = progress * (fullRect.width() - lineWidth) / 2
         currentRect = RectF(fullRect).apply { inset(dx, 0f) }
+        currentRadius = currentRect.width() / 2
         postInvalidate()
     }
 }
