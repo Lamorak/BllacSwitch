@@ -5,9 +5,10 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.Checkable
 import android.widget.FrameLayout
+import androidx.constraintlayout.motion.widget.MotionLayout
 import kotlinx.android.synthetic.main.layout_switch.view.*
 
-class BllacSwitch : FrameLayout, Checkable {
+class BllacSwitch : FrameLayout, Checkable, MotionLayout.TransitionListener {
 
     private var listener: (Boolean) -> Unit = {}
 
@@ -26,6 +27,7 @@ class BllacSwitch : FrameLayout, Checkable {
         setOnClickListener {
             toggle()
         }
+        track.addTransitionListener(this)
     }
 
     override fun isChecked(): Boolean {
@@ -50,4 +52,14 @@ class BllacSwitch : FrameLayout, Checkable {
         val endState = if (isChecked) R.id.checked else R.id.unchecked
         track.transitionToState(endState)
     }
+
+    override fun onTransitionTrigger(layout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
+
+    override fun onTransitionStarted(layout: MotionLayout?, startId: Int, endId: Int) {}
+
+    override fun onTransitionChange(layout: MotionLayout?, startId: Int, endId: Int, transitionProgress: Float) {
+        thumb.progress = transitionProgress
+    }
+
+    override fun onTransitionCompleted(layout: MotionLayout?, currentId: Int) {}
 }
