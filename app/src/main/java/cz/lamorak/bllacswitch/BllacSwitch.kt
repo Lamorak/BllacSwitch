@@ -2,6 +2,8 @@ package cz.lamorak.bllacswitch
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.widget.Checkable
 import android.widget.FrameLayout
@@ -61,5 +63,21 @@ class BllacSwitch : FrameLayout, Checkable, MotionLayout.TransitionListener {
         thumb.progress = transitionProgress
     }
 
-    override fun onTransitionCompleted(layout: MotionLayout?, currentId: Int) {}
+    override fun onTransitionCompleted(layout: MotionLayout?, currentId: Int) {
+        if (currentId == R.id.checked) {
+            thumb.progress = 1f
+            setChecked(true)
+        } else {
+            thumb.progress = 0f
+            setChecked(false)
+        }
+    }
+
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == ACTION_UP && event.eventTime - event.downTime < 100) {
+            performClick()
+            return true
+        }
+        return super.dispatchTouchEvent(event)
+    }
 }

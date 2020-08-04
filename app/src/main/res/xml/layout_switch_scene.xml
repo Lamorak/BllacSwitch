@@ -32,5 +32,11 @@
         app:constraintSetStart="@+id/unchecked"
         app:duration="200"
         app:motionInterpolator="easeInOut">
+
+        <OnSwipe
+            app:onTouchUp="autoComplete"
+            app:dragDirection="dragRight"
+            app:touchRegionId="@id/thumb"
+            app:touchAnchorSide="left" />
     </Transition>
 </MotionScene>
